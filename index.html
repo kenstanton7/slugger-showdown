@@ -214,6 +214,9 @@
     <div class="modal-content">
         <h1 style="color:var(--header-bg); margin-bottom: 0;">YOU'RE OUT!</h1>
         <h2 id="final-score-display" style="color:var(--accent-color); margin-top: 0;">Score: 0</h2>
+        
+        <div id="new-hs-badge" style="display: none; background: var(--success-green); color: white; padding: 6px 20px; border-radius: 20px; font-weight: 900; font-size: 1rem; margin: -10px auto 15px auto; width: fit-content; animation: pulse-correct 0.8s infinite alternate; box-shadow: 0 4px 10px rgba(40, 167, 69, 0.4);">🌟 NEW HIGH SCORE! 🌟</div>
+        
         <button class="btn close-modal" onclick="resetGame()">PLAY AGAIN</button>
         
         <div class="share-grid">
@@ -230,16 +233,16 @@
     let leftData, rightData, score = 0, strikes = 0, currentStreak = 0, busy = false;
     let isMuted = false;
 
-    // AUDIO SETUP (Added Cheer!)
+    // AUDIO SETUP 
     const sfxCrack = new Audio('crack.mp3');
     const sfxPop = new Audio('pop.mp3');
     const sfxRoar = new Audio('roar.mp3');
-    const sfxCheer = new Audio('cheer.mp3'); // NEW HIGH SCORE SOUND
+    const sfxCheer = new Audio('cheer.mp3'); 
     
     sfxCrack.volume = 0.6;
     sfxPop.volume = 0.5;
     sfxRoar.volume = 0.4;
-    sfxCheer.volume = 0.6; // Set to a solid volume for the win
+    sfxCheer.volume = 0.6; 
 
     function toggleMute() {
         isMuted = !isMuted;
@@ -459,18 +462,21 @@
         setTimeout(() => {
             if(strikes >= 3) {
                 let hsKey = getHighScoreKey();
-                // Parse it as an integer so "10" is properly > "9"
                 let currentHS = parseInt(localStorage.getItem(hsKey)) || 0;
+                let newHsBadge = document.getElementById('new-hs-badge');
                 
-                // NEW: Trigger cheer if you beat your high score!
+                // Toggle the visual badge logic alongside the audio!
                 if(score > currentHS && score > 0) {
                     localStorage.setItem(hsKey, score);
                     updateHighScoreDisplay();
+                    newHsBadge.style.display = 'block'; // Un-hide the badge
                     
                     if (!isMuted) {
                         sfxCheer.currentTime = 0;
                         sfxCheer.play().catch(e => console.log("Audio play prevented"));
                     }
+                } else {
+                    newHsBadge.style.display = 'none'; // Keep hidden if they didn't beat it
                 }
 
                 statusBar.classList.remove('on-fire');
@@ -505,6 +511,7 @@
         document.getElementById('score').innerText = "0";
         document.getElementById('strikes').innerText = "⚪⚪⚪";
         document.getElementById('game-over-modal').style.display = 'none';
+        document.getElementById('new-hs-badge').style.display = 'none'; // Resets the badge for the next game
         document.getElementById('status-bar').classList.remove('on-fire'); 
         updateTheme(); 
         nextRound();
