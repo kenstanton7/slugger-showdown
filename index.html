@@ -70,7 +70,6 @@
             transition: background 0.5s, color 0.5s;
         }
 
-        /* NEW: Mute Button Styling */
         .mute-btn {
             position: absolute; right: 85px; top: 50%; transform: translateY(-50%);
             background: var(--text-gold); color: var(--header-bg); border: none; padding: 6px 10px; 
@@ -229,20 +228,19 @@
 <script src="player_pool.js"></script>
 <script>
     let leftData, rightData, score = 0, strikes = 0, currentStreak = 0, busy = false;
-    
-    // NEW: Mute tracking variable
     let isMuted = false;
 
-    // AUDIO SETUP
+    // AUDIO SETUP (Added Cheer!)
     const sfxCrack = new Audio('crack.mp3');
     const sfxPop = new Audio('pop.mp3');
     const sfxRoar = new Audio('roar.mp3');
+    const sfxCheer = new Audio('cheer.mp3'); // NEW HIGH SCORE SOUND
     
     sfxCrack.volume = 0.6;
     sfxPop.volume = 0.5;
     sfxRoar.volume = 0.4;
+    sfxCheer.volume = 0.6; // Set to a solid volume for the win
 
-    // NEW: Function to toggle sound on/off
     function toggleMute() {
         isMuted = !isMuted;
         const muteBtn = document.getElementById('mute-btn');
@@ -433,7 +431,6 @@
             document.getElementById('score').innerText = score;
             document.getElementById(`card-${side}`).classList.add('correct');
             
-            // CHECK IF MUTED BEFORE PLAYING!
             if (!isMuted) {
                 sfxCrack.currentTime = 0;
                 sfxCrack.play().catch(e => console.log("Audio play prevented"));
@@ -453,7 +450,6 @@
             document.getElementById(`card-${side}`).classList.add('wrong');
             statusBar.classList.remove('on-fire'); 
 
-            // CHECK IF MUTED BEFORE PLAYING!
             if (!isMuted) {
                 sfxPop.currentTime = 0;
                 sfxPop.play().catch(e => console.log("Audio play prevented"));
@@ -463,10 +459,18 @@
         setTimeout(() => {
             if(strikes >= 3) {
                 let hsKey = getHighScoreKey();
-                let currentHS = localStorage.getItem(hsKey) || 0;
-                if(score > currentHS) {
+                // Parse it as an integer so "10" is properly > "9"
+                let currentHS = parseInt(localStorage.getItem(hsKey)) || 0;
+                
+                // NEW: Trigger cheer if you beat your high score!
+                if(score > currentHS && score > 0) {
                     localStorage.setItem(hsKey, score);
                     updateHighScoreDisplay();
+                    
+                    if (!isMuted) {
+                        sfxCheer.currentTime = 0;
+                        sfxCheer.play().catch(e => console.log("Audio play prevented"));
+                    }
                 }
 
                 statusBar.classList.remove('on-fire');
