@@ -2,7 +2,7 @@
 
 **The Big Fly: Slugger Showdown** is a fast-paced, highly polished baseball trivia web game. Players test their historical MLB knowledge by guessing which of two randomly selected players has the higher lifetime career stats.
 
-🎯 **Play the live version here:** [Insert Your GitHub Pages URL Here]
+🎯 **Play the live version here:** https://kenstanton7.github.io/slugger-showdown/ 
 
 ---
 
