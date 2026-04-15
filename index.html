@@ -13,7 +13,7 @@
             --fire-orange: #ff4500;
             --fire-glow: rgba(255, 69, 0, 0.8);
 
-            /* DEFAULT: HOME RUN MODE (MLB) */
+            /* DEFAULT: HOME RUN MODE (MLB BLUE & RED) */
             --primary-bg: #1a1a1a;
             --header-bg: #041E42; 
             --accent-color: #BF0D3E; 
@@ -34,6 +34,15 @@
             --accent-color: #fdb927; 
             --text-gold: #ffffff;
             --card-border: #b5ac91;
+        }
+
+        /* STRIKEOUT MODE THEME (MOUND DIRT BROWN) */
+        body.mode-strikeOuts {
+            --primary-bg: #2b1d14; 
+            --header-bg: #3d2b1f; 
+            --accent-color: #e0d8c3; 
+            --text-gold: #ffb703;
+            --card-border: #8b5a2b;
         }
 
         body { 
@@ -84,7 +93,6 @@
         }
         .stat-box { font-weight: 900; font-size: 1.1rem; color: var(--header-bg); transition: color 0.5s; display: flex; align-items: center;}
 
-        /* FIRE INDICATOR CSS */
         #fire-indicator { display: none; color: var(--fire-orange) !important; font-style: italic; }
         
         .stats-bar.on-fire {
@@ -167,6 +175,7 @@
     <select id="game-mode" class="mode-select" onchange="handleModeSwitch()">
         <option value="homeRuns">Home Run Mode</option>
         <option value="hits">Hits Mode</option>
+        <option value="strikeOuts">Strikeout Mode</option> 
     </select>
     <h1 id="main-title">THE BIG FLY</h1>
     <div id="sub-title" style="font-weight: bold; color: var(--text-gold); letter-spacing: 2px; font-size: 0.8rem; transition: color 0.5s;">SLUGGER SHOWDOWN</div>
@@ -228,7 +237,7 @@
     </div>
 </div>
 
-<script src="player_pool.js"></script>
+<script src="player_pool.js?v=3"></script>
 <script>
     let leftData, rightData, score = 0, strikes = 0, currentStreak = 0, busy = false;
     let isMuted = false;
@@ -264,7 +273,7 @@
     }
 
     function checkPools() {
-        if (typeof homeRunPool === 'undefined' || typeof hitsPool === 'undefined') {
+        if (typeof homeRunPool === 'undefined' || typeof hitsPool === 'undefined' || typeof strikeoutsPool === 'undefined') {
             console.error("Pools not found!"); return false;
         }
         return true;
@@ -272,7 +281,8 @@
 
     async function getStats(id) {
         const mode = document.getElementById('game-mode').value;
-        const r = await fetch(`https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=career&group=hitting`);
+        const statGroup = (mode === 'strikeOuts') ? 'pitching' : 'hitting';
+        const r = await fetch(`https://statsapi.mlb.com/api/v1/people/${id}/stats?stats=career&group=${statGroup}`);
         const j = await r.json();
         return j.stats[0]?.splits[0]?.stat[mode] || 0;
     }
@@ -282,18 +292,25 @@
         const body = document.body;
         const ruleText = document.getElementById('rule-text');
         
+        body.classList.remove('mode-hits', 'mode-strikeOuts');
+
         if (mode === 'hits') {
             body.classList.add('mode-hits');
             document.getElementById('main-title').innerText = "THE HIT KING";
             document.getElementById('sub-title').innerText = "CONTACT SHOWDOWN";
             document.title = "The Hit King: Contact Showdown";
-            ruleText.innerHTML = "Out of the two players shown, pick the one with the <strong>most career hits</strong>.<br><br>This mode features players who were active between 2000-2025 and accumulated <strong>at least 300 hits</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> The numbers reflect their <strong>entire lifetime career</strong>, including any seasons they played in the 1980s or 1990s!";
+            ruleText.innerHTML = "Out of the two players shown, pick the one with the <strong>most career hits</strong>.<br><br>This mode features players who were active between 2000-2026 and accumulated <strong>at least 300 hits</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> Numbers reflect their <strong>entire lifetime career</strong>!";
+        } else if (mode === 'strikeOuts') {
+            body.classList.add('mode-strikeOuts');
+            document.getElementById('main-title').innerText = "THE PUNCHOUT";
+            document.getElementById('sub-title').innerText = "MOUND SHOWDOWN";
+            document.title = "The Punchout: Mound Showdown";
+            ruleText.innerHTML = "Out of the two pitchers shown, pick the one with the <strong>most career strikeouts</strong>.<br><br>This mode features elite pitchers active between 2000-2026 who recorded <strong>at least 500 career strikeouts</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> Numbers reflect their <strong>entire lifetime career</strong>!";
         } else {
-            body.classList.remove('mode-hits');
             document.getElementById('main-title').innerText = "THE BIG FLY";
             document.getElementById('sub-title').innerText = "SLUGGER SHOWDOWN";
             document.title = "The Big Fly: Slugger Showdown";
-            ruleText.innerHTML = "Out of the two players shown, pick the one with the <strong>most career home runs</strong>.<br><br>This mode features players who were active between 2000-2025 and launched <strong>at least 50 home runs</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> The numbers reflect their <strong>entire lifetime career</strong>, including any seasons they played in the 1980s or 1990s!";
+            ruleText.innerHTML = "Out of the two players shown, pick the one with the <strong>most career home runs</strong>.<br><br>This mode features players who were active between 2000-2026 and launched <strong>at least 50 home runs</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> Numbers reflect their <strong>entire lifetime career</strong>!";
         }
         updateHighScoreDisplay();
     }
@@ -382,8 +399,9 @@
         if (!checkPools()) return;
         busy = true;
         const mode = document.getElementById('game-mode').value;
-        const pool = (mode === 'homeRuns') ? homeRunPool : hitsPool;
-        const labelText = (mode === 'homeRuns') ? 'Career Home Runs' : 'Career Hits';
+        
+        const pool = (mode === 'homeRuns') ? homeRunPool : (mode === 'hits') ? hitsPool : strikeoutsPool;
+        const labelText = (mode === 'homeRuns') ? 'Career Home Runs' : (mode === 'hits') ? 'Career Hits' : 'Career Strikeouts';
         
         document.querySelectorAll('.label-text').forEach(el => { el.innerText = labelText; el.style.visibility = 'hidden'; });
         document.querySelectorAll('.hr-reveal').forEach(el => el.style.visibility = 'hidden');
@@ -465,18 +483,17 @@
                 let currentHS = parseInt(localStorage.getItem(hsKey)) || 0;
                 let newHsBadge = document.getElementById('new-hs-badge');
                 
-                // Toggle the visual badge logic alongside the audio!
                 if(score > currentHS && score > 0) {
                     localStorage.setItem(hsKey, score);
                     updateHighScoreDisplay();
-                    newHsBadge.style.display = 'block'; // Un-hide the badge
+                    newHsBadge.style.display = 'block'; 
                     
                     if (!isMuted) {
                         sfxCheer.currentTime = 0;
                         sfxCheer.play().catch(e => console.log("Audio play prevented"));
                     }
                 } else {
-                    newHsBadge.style.display = 'none'; // Keep hidden if they didn't beat it
+                    newHsBadge.style.display = 'none'; 
                 }
 
                 statusBar.classList.remove('on-fire');
@@ -487,8 +504,9 @@
     }
 
     function share(platform) {
-        const modeName = document.getElementById('game-mode').value === 'homeRuns' ? 'Home Runs' : 'Hits';
-        const text = `⚾ I hit a score of ${score} on ${modeName} mode in 'The Big Fly'! Can you beat my high score? Play here: ${window.location.href}`;
+        const modeSel = document.getElementById('game-mode');
+        const modeName = modeSel.options[modeSel.selectedIndex].text;
+        const text = `⚾ I hit a score of ${score} on ${modeName} in 'The Big Fly'! Can you beat my high score? Play here: ${window.location.href}`;
         
         if (platform === 'copy' || platform === 'ig') {
             navigator.clipboard.writeText(text);
@@ -511,7 +529,7 @@
         document.getElementById('score').innerText = "0";
         document.getElementById('strikes').innerText = "⚪⚪⚪";
         document.getElementById('game-over-modal').style.display = 'none';
-        document.getElementById('new-hs-badge').style.display = 'none'; // Resets the badge for the next game
+        document.getElementById('new-hs-badge').style.display = 'none'; 
         document.getElementById('status-bar').classList.remove('on-fire'); 
         updateTheme(); 
         nextRound();
