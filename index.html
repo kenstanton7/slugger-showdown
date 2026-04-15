@@ -36,13 +36,13 @@
             --card-border: #b5ac91;
         }
 
-        /* STRIKEOUT MODE THEME (MOUND DIRT BROWN) */
+        /* STRIKEOUT MODE THEME (MIDNIGHT SLATE & ELECTRIC CYAN) */
         body.mode-strikeOuts {
-            --primary-bg: #2b1d14; 
-            --header-bg: #3d2b1f; 
-            --accent-color: #e0d8c3; 
-            --text-gold: #ffb703;
-            --card-border: #8b5a2b;
+            --primary-bg: #111827; 
+            --header-bg: #1f2937; 
+            --accent-color: #0ea5e9; 
+            --text-gold: #f59e0b;
+            --card-border: #4b5563;
         }
 
         body { 
@@ -439,6 +439,7 @@
     function makeGuess(side) {
         if(busy) return;
         busy = true;
+        const mode = document.getElementById('game-mode').value;
         const isCorrect = (side === 'left' && leftData.val > rightData.val) || (side === 'right' && rightData.val > leftData.val);
         document.getElementById('hr-left').innerText = leftData.val;
         document.getElementById('hr-right').innerText = rightData.val;
@@ -453,8 +454,10 @@
             document.getElementById(`card-${side}`).classList.add('correct');
             
             if (!isMuted) {
-                sfxCrack.currentTime = 0;
-                sfxCrack.play().catch(e => console.log("Audio play prevented"));
+                // NEW: Dynamic sound based on mode!
+                const correctSound = (mode === 'strikeOuts') ? sfxPop : sfxCrack;
+                correctSound.currentTime = 0;
+                correctSound.play().catch(e => console.log("Audio play prevented"));
             }
             
             if (currentStreak >= 5) { 
@@ -472,8 +475,10 @@
             statusBar.classList.remove('on-fire'); 
 
             if (!isMuted) {
-                sfxPop.currentTime = 0;
-                sfxPop.play().catch(e => console.log("Audio play prevented"));
+                // NEW: Dynamic sound based on mode!
+                const wrongSound = (mode === 'strikeOuts') ? sfxCrack : sfxPop;
+                wrongSound.currentTime = 0;
+                wrongSound.play().catch(e => console.log("Audio play prevented"));
             }
         }
 
