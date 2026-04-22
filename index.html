@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Diamond Duel: Stat Showdown</title>
+    <title>The Diamond Duel: Home Run Showdown</title>
     <style>
         :root { 
             --off-white: #fdfaf0; 
@@ -296,13 +296,13 @@
 
         if (mode === 'hits') {
             body.classList.add('mode-hits');
-            document.getElementById('sub-title').innerText = "CONTACT SHOWDOWN";
-            document.title = "The Diamond Duel: Contact Showdown";
+            document.getElementById('sub-title').innerText = "HIT SHOWDOWN";
+            document.title = "The Diamond Duel: Hit Showdown";
             ruleText.innerHTML = "Out of the two players shown, pick the one with the <strong>most career hits</strong>.<br><br>This mode features players who were active between 2000-2026 and accumulated <strong>at least 300 hits</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> Numbers reflect their <strong>entire lifetime career</strong>!";
         } else if (mode === 'strikeOuts') {
             body.classList.add('mode-strikeOuts');
-            document.getElementById('sub-title').innerText = "MOUND SHOWDOWN";
-            document.title = "The Diamond Duel: Mound Showdown";
+            document.getElementById('sub-title').innerText = "STRIKEOUT SHOWDOWN";
+            document.title = "The Diamond Duel: Strikeout Showdown";
             ruleText.innerHTML = "Out of the two pitchers shown, pick the one with the <strong>most career strikeouts</strong>.<br><br>This mode features elite pitchers active between 2000-2026 who recorded <strong>at least 500 career strikeouts</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> Numbers reflect their <strong>entire lifetime career</strong>!";
         } else {
             document.getElementById('sub-title').innerText = "HOME RUN SHOWDOWN";
