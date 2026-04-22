@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Big Fly: Slugger Showdown</title>
+    <title>The Diamond Duel: Stat Showdown</title>
     <style>
         :root { 
             --off-white: #fdfaf0; 
@@ -13,12 +13,12 @@
             --fire-orange: #ff4500;
             --fire-glow: rgba(255, 69, 0, 0.8);
 
-            /* DEFAULT: HOME RUN MODE (MLB BLUE & RED) */
-            --primary-bg: #1a1a1a;
-            --header-bg: #041E42; 
-            --accent-color: #BF0D3E; 
-            --text-gold: #c5a059;
-            --card-border: #ddd;
+            /* DEFAULT: HOME RUN MODE (MIDNIGHT BLUE & SEAM RED) */
+            --primary-bg: #0b1c2c;
+            --header-bg: #040a14; 
+            --accent-color: #d32f2f; 
+            --text-gold: #ffffff;
+            --card-border: #94a3b8;
             
             /* Sharp Black Shadow globally applied for perfect readability */
             --title-color: #ffffff;
@@ -27,27 +27,27 @@
             --vs-shadow: #000000;
         }
 
-        /* HITS MODE THEME (BALLPARK GREEN) */
+        /* HITS MODE THEME (OUTFIELD IVY & TROPHY GOLD) */
         body.mode-hits {
-            --primary-bg: #122615; 
-            --header-bg: #004831; 
-            --accent-color: #fdb927; 
+            --primary-bg: #112a1e; 
+            --header-bg: #06140e; 
+            --accent-color: #d4af37; 
             --text-gold: #ffffff;
-            --card-border: #b5ac91;
+            --card-border: #8b9c91;
         }
 
-        /* STRIKEOUT MODE THEME (MIDNIGHT SLATE & ELECTRIC CYAN) */
+        /* STRIKEOUT MODE THEME (CHARCOAL & ELECTRIC VELOCITY BLUE) */
         body.mode-strikeOuts {
-            --primary-bg: #111827; 
-            --header-bg: #1f2937; 
-            --accent-color: #0ea5e9; 
-            --text-gold: #f59e0b;
-            --card-border: #4b5563;
+            --primary-bg: #1c1c22; 
+            --header-bg: #0d0d12; 
+            --accent-color: #0284c7; 
+            --text-gold: #ffffff;
+            --card-border: #6b7280;
         }
 
         body { 
             font-family: var(--clean-font); background-color: var(--primary-bg);
-            background-image: radial-gradient(#333 1px, transparent 1px);
+            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
             background-size: 20px 20px; color: #333; margin: 0; display: flex;
             flex-direction: column; align-items: center; min-height: 100vh;
             transition: background-color 0.5s ease;
@@ -67,21 +67,21 @@
 
         .mode-select {
             position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
-            background: var(--vintage-cream); color: var(--header-bg); border: 2px solid var(--text-gold); 
+            background: var(--vintage-cream); color: #111; border: 2px solid var(--accent-color); 
             padding: 5px; font-weight: 800; border-radius: 4px; cursor: pointer; font-family: var(--clean-font); 
             font-size: 0.75rem; transition: color 0.5s, border 0.5s;
         }
 
         .help-btn {
             position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
-            background: var(--text-gold); color: var(--header-bg); border: none; padding: 6px 12px; 
+            background: var(--vintage-cream); color: #111; border: none; padding: 6px 12px; 
             border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 0.7rem;
             transition: background 0.5s, color 0.5s;
         }
 
         .mute-btn {
             position: absolute; right: 85px; top: 50%; transform: translateY(-50%);
-            background: var(--text-gold); color: var(--header-bg); border: none; padding: 6px 10px; 
+            background: var(--vintage-cream); color: #111; border: none; padding: 6px 10px; 
             border-radius: 4px; font-weight: 900; cursor: pointer; font-size: 0.7rem;
             transition: background 0.5s, color 0.5s;
         }
@@ -111,7 +111,7 @@
 
         .baseball-card {
             width: 320px; background: var(--off-white); padding: 12px; border: 2px solid var(--card-border);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); cursor: pointer; transition: 0.3s; position: relative; border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6); cursor: pointer; transition: 0.3s; position: relative; border-radius: 8px;
         }
         .baseball-card::before {
             content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
@@ -142,7 +142,7 @@
 
         .hr-container { text-align: center; height: 90px; display: flex; flex-direction: column; justify-content: center; background: rgba(0,0,0,0.03); border-radius: 10px; margin-top: 5px; }
         .label-text { font-size: 0.7rem; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 1px; visibility: hidden; margin-bottom: -5px; }
-        .hr-reveal { font-family: 'Impact', sans-serif; font-size: 4rem; color: var(--accent-color); visibility: hidden; text-shadow: 2px 2px 0px #fff; transition: color 0.5s;}
+        .hr-reveal { font-family: 'Impact', sans-serif; font-size: 4rem; color: var(--accent-color); visibility: hidden; text-shadow: 2px 2px 0px rgba(0,0,0,0.1); transition: color 0.5s;}
 
         .correct { border: 12px solid var(--success-green) !important; box-shadow: 0 0 40px rgba(40, 167, 69, 0.7) !important; animation: pulse-correct 0.6s ease; }
         .correct .result-overlay { background: rgba(40, 167, 69, 0.3); opacity: 1; }
@@ -177,8 +177,8 @@
         <option value="hits">Hits Mode</option>
         <option value="strikeOuts">Strikeout Mode</option> 
     </select>
-    <h1 id="main-title">THE BIG FLY</h1>
-    <div id="sub-title" style="font-weight: bold; color: var(--text-gold); letter-spacing: 2px; font-size: 0.8rem; transition: color 0.5s;">SLUGGER SHOWDOWN</div>
+    <h1 id="main-title">THE DIAMOND DUEL</h1>
+    <div id="sub-title" style="font-weight: bold; color: var(--accent-color); letter-spacing: 2px; font-size: 0.8rem; transition: color 0.5s;">HOME RUN SHOWDOWN</div>
     <button id="mute-btn" class="mute-btn" onclick="toggleMute()">🔊 Sound</button>
     <button class="help-btn" onclick="toggleInstructions(true)">Rules</button>
 </header>
@@ -265,7 +265,7 @@
         }
     }
 
-    function getHighScoreKey() { return `big_fly_high_${document.getElementById('game-mode').value}`; }
+    function getHighScoreKey() { return `diamond_duel_high_${document.getElementById('game-mode').value}`; }
 
     function updateHighScoreDisplay() {
         let hs = localStorage.getItem(getHighScoreKey()) || 0;
@@ -296,20 +296,17 @@
 
         if (mode === 'hits') {
             body.classList.add('mode-hits');
-            document.getElementById('main-title').innerText = "THE HIT KING";
             document.getElementById('sub-title').innerText = "CONTACT SHOWDOWN";
-            document.title = "The Hit King: Contact Showdown";
+            document.title = "The Diamond Duel: Contact Showdown";
             ruleText.innerHTML = "Out of the two players shown, pick the one with the <strong>most career hits</strong>.<br><br>This mode features players who were active between 2000-2026 and accumulated <strong>at least 300 hits</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> Numbers reflect their <strong>entire lifetime career</strong>!";
         } else if (mode === 'strikeOuts') {
             body.classList.add('mode-strikeOuts');
-            document.getElementById('main-title').innerText = "THE PUNCHOUT";
             document.getElementById('sub-title').innerText = "MOUND SHOWDOWN";
-            document.title = "The Punchout: Mound Showdown";
+            document.title = "The Diamond Duel: Mound Showdown";
             ruleText.innerHTML = "Out of the two pitchers shown, pick the one with the <strong>most career strikeouts</strong>.<br><br>This mode features elite pitchers active between 2000-2026 who recorded <strong>at least 500 career strikeouts</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> Numbers reflect their <strong>entire lifetime career</strong>!";
         } else {
-            document.getElementById('main-title').innerText = "THE BIG FLY";
-            document.getElementById('sub-title').innerText = "SLUGGER SHOWDOWN";
-            document.title = "The Big Fly: Slugger Showdown";
+            document.getElementById('sub-title').innerText = "HOME RUN SHOWDOWN";
+            document.title = "The Diamond Duel: Home Run Showdown";
             ruleText.innerHTML = "Out of the two players shown, pick the one with the <strong>most career home runs</strong>.<br><br>This mode features players who were active between 2000-2026 and launched <strong>at least 50 home runs</strong>.<br><br><span style='color: var(--accent-color); font-weight: 900; font-size: 1.1em;'>IMPORTANT:</span> Numbers reflect their <strong>entire lifetime career</strong>!";
         }
         updateHighScoreDisplay();
@@ -454,7 +451,6 @@
             document.getElementById(`card-${side}`).classList.add('correct');
             
             if (!isMuted) {
-                // NEW: Dynamic sound based on mode!
                 const correctSound = (mode === 'strikeOuts') ? sfxPop : sfxCrack;
                 correctSound.currentTime = 0;
                 correctSound.play().catch(e => console.log("Audio play prevented"));
@@ -475,7 +471,6 @@
             statusBar.classList.remove('on-fire'); 
 
             if (!isMuted) {
-                // NEW: Dynamic sound based on mode!
                 const wrongSound = (mode === 'strikeOuts') ? sfxCrack : sfxPop;
                 wrongSound.currentTime = 0;
                 wrongSound.play().catch(e => console.log("Audio play prevented"));
@@ -511,7 +506,7 @@
     function share(platform) {
         const modeSel = document.getElementById('game-mode');
         const modeName = modeSel.options[modeSel.selectedIndex].text;
-        const text = `⚾ I hit a score of ${score} on ${modeName} in 'The Big Fly'! Can you beat my high score? Play here: ${window.location.href}`;
+        const text = `⚾ I hit a score of ${score} on ${modeName} in 'The Diamond Duel'! Can you beat my high score? Play here: ${window.location.href}`;
         
         if (platform === 'copy' || platform === 'ig') {
             navigator.clipboard.writeText(text);
