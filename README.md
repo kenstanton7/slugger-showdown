@@ -13,10 +13,10 @@ The game features three distinct modes. Switching modes dynamically alters the U
 * 💥 **Home Run Showdown** * **Theme:** Midnight Blue & Seam Red
   * **Pool:** Power hitters active between 2000–2026 with **50+ Career Home Runs**.
   * **Audio:** A satisfying *bat crack* for a correct guess, and a *catcher's pop* for a strike.
-* 🏏 **Contact Showdown** * **Theme:** Outfield Ivy Green & Trophy Gold
+* 🏏 **Hit Showdown** * **Theme:** Outfield Ivy Green & Trophy Gold
   * **Pool:** Elite contact hitters and veterans active between 2000–2026 with **300+ Career Hits**.
   * **Audio:** *Bat crack* for correct, *catcher's pop* for a strike.
-* ⚾ **Mound Showdown** * **Theme:** Charcoal & Electric Velocity Blue
+* ⚾ **Strikeout Showdown** * **Theme:** Charcoal & Electric Velocity Blue
   * **Pool:** Dominant pitchers active between 2000–2026 with **500+ Career Strikeouts**.
   * **Audio:** *Swapped!* A 99mph *catcher's pop* for a correct guess, and a punishing *bat crack* for a strike.
 
